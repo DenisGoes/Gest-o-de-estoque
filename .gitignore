@@ -1,4 +1,4 @@
-
+config/database.php
 vendor/
 composer.json
 composer.lock
