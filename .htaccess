@@ -1,0 +1,31 @@
+# ----------------------------------------------------------------------
+# CONFIGURAÇÃO DE ROTEAMENTO (FRONT CONTROLLER PATTERN)
+# ----------------------------------------------------------------------
+
+# Ativa o motor de reescrita do Apache
+RewriteEngine On
+
+# 1. CONDIÇÃO: Se o que o usuário digitou NÃO for um arquivo real (ex: uma imagem ou .css)
+RewriteCond %{REQUEST_FILENAME} !-f
+
+# 2. CONDIÇÃO: Se o que o usuário digitou NÃO for uma pasta real
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# 3. REGRA DE OURO: Pegue qualquer URL digitada e mande para o index.php
+# O parâmetro 'url=$1' permite que seu roteador PHP saiba qual página foi pedida.
+# [QSA] - Query String Append: Mantém parâmetros como ?id=1 na URL.
+# [L]   - Last: Para de processar outras regras se esta for atendida.
+RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+
+# ----------------------------------------------------------------------
+# SEGURANÇA ADICIONAL (RECOMENDADO PARA O SEU PORTFÓLIO)
+# ----------------------------------------------------------------------
+
+# Impede que usuários naveguem pelas pastas do servidor (Directory Browsing)
+Options -Indexes
+
+# Bloqueia o acesso direto a arquivos sensíveis como .env ou logs
+<FilesMatch "^\.env|composer\.json|composer\.lock|.*\.log$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
